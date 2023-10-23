@@ -9,13 +9,21 @@ const Notification = {
 
 const THRESHOLD_PERCENTAGE = 40;
 
+function switchCommasToDots(inputString: string): string {
+  // Use the replace method with a regular expression to replace all ',' with '.'
+  const resultString = inputString.replace(/,/g, '.');
+
+  return resultString;
+}
+
 // Extracts and returns the price from a list of possible elements.
 export function extractPrice(...elements: any) {
   for (const element of elements) {
     const priceText = element.text().trim();
+    const update_priceText = switchCommasToDots(priceText);
 
     if(priceText) {
-      const cleanPrice = priceText.replace(/[^\d.]/g, '');
+      const  cleanPrice = update_priceText.replace(/[^\d.]/g, '');
 
       let firstPrice; 
 
@@ -110,9 +118,8 @@ export const getEmailNotifType = (
   return null;
 };
 
+
 export const formatNumber = (num: number = 0) => {
-  return num.toLocaleString(undefined, {
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  });
+  
+  return switchCommasToDots(num.toLocaleString(undefined));
 };
