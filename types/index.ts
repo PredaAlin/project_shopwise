@@ -7,6 +7,7 @@ export type PriceHistoryItem = {
   };
   
   export type Product = {
+    hearts: number;
     _id?: string;
     url: string;
     currency: string;

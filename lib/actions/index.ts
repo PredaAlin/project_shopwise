@@ -78,7 +78,8 @@ export async function getSimilarProducts(productId: string){
         if (!currentProduct) return;
 
         const similarProducts = await Product.find({
-            _id: {$ne: productId}
+            _id: {$ne: productId},
+            category:{ $eq: currentProduct.category }
         }).limit(3)
         return similarProducts;
 
@@ -103,6 +104,20 @@ export async function addUserEmailToProduct(productId: string, userEmail: string
 
             await sendEmail( emailContent, [userEmail]);
         }
+        
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export async function updateProductHearts(productId: string, hearts:number){
+    try {
+        connectToDB();
+        const product = await Product.findById(productId);
+        if (!product) return;
+
+        product.hearts = hearts;
+        await product.save();
         
     } catch (error) {
         console.log(error);

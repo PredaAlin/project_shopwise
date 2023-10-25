@@ -40,6 +40,7 @@ const Searchbar = () => {
 
         // Scrape the prduct page
         const product = await scrapeAndStoreProduct(searchPrompt);
+        window.location.reload();
     }
   };
   return (

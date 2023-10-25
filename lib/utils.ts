@@ -11,7 +11,7 @@ const THRESHOLD_PERCENTAGE = 40;
 
 function switchCommasToDots(inputString: string): string {
   // Use the replace method with a regular expression to replace all ',' with '.'
-  const resultString = inputString.replace(/,/g, '.');
+  const resultString = inputString.split(',').join('.');
 
   return resultString;
 }
@@ -43,6 +43,42 @@ export function extractCurrency(element: any) {
   const currencyText = element.text().trim().slice(0, 1);
   return currencyText ? currencyText : "";
 }
+
+// Extract and returns the reviewcount from an element
+export function extractReviewCount(element: any) {
+  const reviewCountText = element.text().trim();
+  console.log(reviewCountText);
+  
+  
+  // Use a regular expression to match numbers, including decimals
+  const cleanText = reviewCountText.replace(/,/g, '.').match(/\d+(\.\d+)?/);
+
+ //console.log (cleanText)
+  
+  if (cleanText) {
+    const result = parseFloat(cleanText[0]); // Convert the matched string to a float
+    if (!isNaN(result)) {
+     // console.log(result);
+      return result;
+    }
+  }
+  
+  // Handle the case where no valid number was found
+  return 0; // or another default value
+}
+
+export function extractStars(element:any){
+  const stars = element.text().trim().replace(/,/g, '.');
+  const match = stars.match(/\d+\.\d+/);
+
+  if(match){
+    const extractedStars = match[0];
+    return extractedStars;
+  }
+  return 0;
+}
+
+
 
 // Extracts description from two possible elements from amazon
 export function extractDescription($: any) {
@@ -99,6 +135,8 @@ export function getAveragePrice(priceList: PriceHistoryItem[]) {
   return averagePrice;
 }
 
+
+
 export const getEmailNotifType = (
   scrapedProduct: Product,
   currentProduct: Product
@@ -121,5 +159,5 @@ export const getEmailNotifType = (
 
 export const formatNumber = (num: number = 0) => {
   
-  return switchCommasToDots(num.toLocaleString(undefined));
+  return num.toLocaleString(undefined);
 };

@@ -6,7 +6,13 @@ import Link from "next/link";
 import { formatNumber } from "@/lib/utils";
 import PriceInfoCard from "@/components/PriceInfoCard";
 import ProductCard from "@/components/ProductCard";
+
+
 import Modal from "@/components/Modal";
+import HeartsButton from "@/components/HeartsButton";
+import Bookmark from "@/components/Bookmark";
+import ShareButton from "@/components/Share";
+
 
 type Props = {
   params: { id: string };
@@ -14,6 +20,10 @@ type Props = {
 
 const ProductDetails = async ({ params: { id } }: Props) => {
   const product: Product = await getProductById(id);
+  
+  
+  
+  
 
   if (!product) redirect("/");
   const similarProducts = await getSimilarProducts(id);
@@ -48,36 +58,11 @@ const ProductDetails = async ({ params: { id } }: Props) => {
             </div>
 
             <div className="flex items-center gap-3">
-              <div className="product-hearts">
-                <Image
-                  src="/assets/icons/red-heart.svg"
-                  alt="heart"
-                  width={20}
-                  height={20}
-                />
+              {/* <HeartsButton id = {id} /> */}
 
-                <p className="text-base font-semibold text-[#D46F77]">
-                  {product.reviewsCount}
-                </p>
-              </div>
+              <Bookmark/>
 
-              <div className="p-2 bg-white-200 rounded-10">
-                <Image
-                  src="/assets/icons/bookmark.svg"
-                  alt="bookmark"
-                  width={20}
-                  height={20}
-                />
-              </div>
-
-              <div className="p-2 bg-white-200 rounded-10">
-                <Image
-                  src="/assets/icons/share.svg"
-                  alt="share"
-                  width={20}
-                  height={20}
-                />
-              </div>
+              <ShareButton shareURL={`http://localhost:3000/products/${product._id}`}/>
             </div>
           </div>
           <div className="product-info">
@@ -98,7 +83,7 @@ const ProductDetails = async ({ params: { id } }: Props) => {
                   alt="star"
                   width={16}
                   height={16} />
-                  <p className="text-sm text-primary-orange font-semibold">{product.stars || '25'} </p>
+                  <p className="text-sm text-primary-orange font-semibold">{product.stars} </p>
                 </div>
 
                 <div className="product-reviews">
@@ -108,13 +93,13 @@ const ProductDetails = async ({ params: { id } }: Props) => {
                   width={16}
                   height={16}/>
                   <p className="text-sm text-secondary font-semibold">
-                    {product.reviewsCount} Reviews
+                    {(product.reviewsCount)} Reviews
                   </p>
                 </div>
               </div>
 
               <p className="text-sm text-black opacity-50">
-                <span className="text-primary-green font-semibold">93%</span> of buyers have recommended this.
+                <span className="text-primary-green font-semibold">{product.stars * 20}%</span> of buyers have recommended this.
               </p>
 
             </div>
