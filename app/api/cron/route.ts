@@ -26,8 +26,6 @@ export async function GET(request: Request) {
 
         if (!scrapedProduct) return;
 
-        console.log('Current Product:', currentProduct);
-
         const updatedPriceHistory = [
           ...currentProduct.priceHistory,
           {
