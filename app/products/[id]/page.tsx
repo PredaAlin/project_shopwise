@@ -58,7 +58,6 @@ const ProductDetails = async ({ params: { id } }: Props) => {
             </div>
 
             <div className="flex items-center gap-3">
-              {/* <HeartsButton id = {id} /> */}
 
               <Bookmark/>
 

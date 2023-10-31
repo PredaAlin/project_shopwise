@@ -12,7 +12,6 @@ import {
 export async function scrapeAmazonProduct(url: string) {
   if (!url) return;
 
-  // curl --proxy brd.superproxy.io:22225 --proxy-user brd-customer-hl_4e858523-zone-unblocker:j0p11of90y8m -k https://lumtest.com/myip.json
 
   //BrightData proxy configuration
   const username = String(process.env.BRIGHT_DATA_USERNAME);
@@ -57,11 +56,11 @@ export async function scrapeAmazonProduct(url: string) {
     )
       .text()
       .trim();
-    console.log(categoryFirst);
+    
     const starsCount = extractStars(
       $("span#acrPopover .a-size-base.a-color-base")
     );
-    console.log(starsCount);
+    
 
     const outOfStock =
       $("#availability span").text().trim().toLowerCase() ===
@@ -89,7 +88,7 @@ export async function scrapeAmazonProduct(url: string) {
       currentPrice: Number(currentPrice) || Number(originalPrice),
       originalPrice: Number(originalPrice) || Number(currentPrice),
       priceHistory: [],
-      discountRate: Number(discountRate) || 0,
+      discountRate:  Number(discountRate) || 0,
       category: categoryFirst,
       reviewsCount: Number(reviewCount),
       stars: Number(starsCount),
@@ -100,6 +99,7 @@ export async function scrapeAmazonProduct(url: string) {
       highestPrice: Number(originalPrice) || Number(currentPrice),
       averagePrice: Number(currentPrice) || Number(originalPrice),
     };
+    
     return data;
   } catch (error: any) {
     throw new Error(`Failed to scrape product: ${error.message}`);

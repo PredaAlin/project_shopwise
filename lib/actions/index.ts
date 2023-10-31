@@ -14,7 +14,9 @@ export async function scrapeAndStoreProduct(productURL: string){
 
     try {
         connectToDB();
+       
         const scrapedProduct = await scrapeAmazonProduct(productURL);
+       
 
         if (!scrapedProduct) return;
 
@@ -23,6 +25,7 @@ export async function scrapeAndStoreProduct(productURL: string){
         const existingProduct = await Product.findOne({url: scrapedProduct.url});
 
         if(existingProduct){
+            
             const updatedPriceHistory: any = [
                 ...existingProduct.priceHistory,
                 {price: scrapedProduct.currentPrice}
@@ -38,8 +41,10 @@ export async function scrapeAndStoreProduct(productURL: string){
         }
 
         const newProduct = await Product.findOneAndUpdate({url: scrapedProduct.url}, product, {upsert:true, new: true});
-
         revalidatePath(`/products/${newProduct._id}`);
+        
+        return `/products/${newProduct._id}`;
+
         
     } catch (error) {
         throw new Error(`Failed to create/update product : ${error}`)
@@ -70,6 +75,18 @@ export async function getAllProducts(){
         console.log(error);
     }
 }
+
+export async function getRecentProducts(limit = 4) {
+    try {
+      connectToDB();
+      const products = await Product.find()
+        .sort({ createdAt: -1 }) 
+        .limit(limit); 
+      return products;
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
 export async function getSimilarProducts(productId: string){
     try {
